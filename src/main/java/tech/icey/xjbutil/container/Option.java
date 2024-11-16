@@ -61,6 +61,11 @@ public abstract sealed class Option<T> {
         }
     }
 
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public static <T> Option<T> fromJavaOptional(java.util.Optional<T> optional) {
+        return optional.map(Option::fromNullable).orElseGet(Option::none);
+    }
+
     public T get() {
         return ((Some<T>)this).value;
     }
@@ -73,19 +78,19 @@ public abstract sealed class Option<T> {
         return this instanceof None;
     }
 
-    public T getOrDefault(T defaultValue) {
-        if (this instanceof Some) {
-            return ((Some<T>)this).value;
-        } else {
-            return defaultValue;
-        }
-    }
-
-    public T getOrCompute(Function0<T> supplier) {
+    public T or(Function0<T> supplier) {
         if (this instanceof Some) {
             return ((Some<T>)this).value;
         } else {
             return supplier.apply();
+        }
+    }
+
+    public T orElse(T defaultValue) {
+        if (this instanceof Some) {
+            return ((Some<T>)this).value;
+        } else {
+            return defaultValue;
         }
     }
 }
