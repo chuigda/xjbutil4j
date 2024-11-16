@@ -4,6 +4,42 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tech.icey.xjbutil.functional.Function0;
 
+import java.util.NoSuchElementException;
+
+/// A somewhat modernized option type intended to replace old, very limited {@link java.util.Optional}.
+///
+/// You can create an option with {@link Option#some(Object)} and {@link Option#none()}:
+///
+/// {@snippet lang=java :
+/// Option<String> some = Option.some("Hello, world!");
+/// Option<String> none = Option.none();
+///
+/// System.out.println(some); // prints "Hello, world!"
+/// System.out.println(none); // prints "Option.None"}
+///
+/// And the general preferred way of using it is to use poor man's `if let`:
+///
+/// {@snippet lang=java :
+/// if (option instanceof Option.Some<String> someString) {
+///     doSomethingWithString(someString.value);
+/// }}
+///
+/// Poor man's `let else`:
+///
+/// {@snippet lang=java :
+/// if (!(option instanceof Option.Some<String> someString)) {
+///     throw new RuntimeException("色不异空不是说让你真给我个空值啊");
+/// }
+///
+/// doSomethingWithString(someString.value);}
+///
+/// And new genesis Java switch:
+///
+/// {@snippet lang=java :
+/// switch (option) {
+///     case Option.Some<String> someString -> doSomethingWithString(someString.value);
+///     case Option.None<?> none -> throw new RuntimeException("色不异空不是说让你真给我个空值啊");
+/// }}
 public abstract sealed class Option<T> {
     public static final class Some<T> extends Option<T> {
         public final @NotNull T value;
@@ -79,19 +115,23 @@ public abstract sealed class Option<T> {
         return optional.map(Option::fromNullable).orElseGet(Option::none);
     }
 
-    public T get() {
-        return ((Some<T>)this).value;
+    public final T get() {
+        if (this instanceof Some) {
+            return ((Some<T>)this).value;
+        } else {
+            throw new NoSuchElementException("Option is None");
+        }
     }
 
-    public boolean isSome() {
+    public final boolean isSome() {
         return this instanceof Some;
     }
 
-    public boolean isNone() {
+    public final boolean isNone() {
         return this instanceof None;
     }
 
-    public T or(Function0<T> supplier) {
+    public final T or(Function0<T> supplier) {
         if (this instanceof Some) {
             return ((Some<T>)this).value;
         } else {
@@ -99,7 +139,7 @@ public abstract sealed class Option<T> {
         }
     }
 
-    public T orElse(T defaultValue) {
+    public final T orElse(T defaultValue) {
         if (this instanceof Some) {
             return ((Some<T>)this).value;
         } else {
