@@ -16,12 +16,29 @@ public abstract sealed class Option<T> {
         public String toString() {
             return this.value.toString();
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            Some<?> some = (Some<?>) obj;
+            return value.equals(some.value);
+        }
     }
 
     public static final class None<T> extends Option<T> {
         @Override
         public String toString() {
             return "Option.None";
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof None;
         }
 
         private static final None<?> INSTANCE = new None<>();
