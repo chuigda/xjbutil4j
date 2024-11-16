@@ -21,16 +21,10 @@ public abstract sealed class ConfigNode {
     }
 
     public static final class ConfigTree extends ConfigNode {
-        private final String key;
         private final HashMap<String, ConfigNode> children;
 
-        public ConfigTree(String key) {
-            this.key = key;
+        public ConfigTree() {
             this.children = new HashMap<>();
-        }
-
-        public String key() {
-            return key;
         }
 
         public HashMap<String, ConfigNode> children() {
@@ -39,10 +33,7 @@ public abstract sealed class ConfigNode {
 
         @Override
         public String toString() {
-            if (key.isEmpty()) {
-                return "Config{children=" + children + "}";
-            }
-            return "ConfigTree{key='" + key + "', children=" + children + "}";
+            return "ConfigTree{children=" + children + "}";
         }
     }
 }

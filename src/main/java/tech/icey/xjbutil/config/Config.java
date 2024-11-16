@@ -19,7 +19,7 @@ public final class Config {
                 .map(String::strip)
                 .filter(s -> !s.isEmpty())
                 .toList();
-        ConfigNode.ConfigTree root = new ConfigNode.ConfigTree("");
+        ConfigNode.ConfigTree root = new ConfigNode.ConfigTree();
 
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
@@ -82,7 +82,7 @@ public final class Config {
                     return;
                 }
             } else {
-                tree = new ConfigNode.ConfigTree(keySections[sectionId]);
+                tree = new ConfigNode.ConfigTree();
                 map.put(keySections[sectionId], tree);
             }
 
@@ -98,9 +98,9 @@ public final class Config {
         if (node instanceof ConfigNode.ConfigValue value) {
             builder.append(prefix).append(" = ").append(value.value()).append("\n");
         } else if (node instanceof ConfigNode.ConfigTree tree) {
-            String newPrefix = prefix.isEmpty() ? tree.key() : prefix + "." + tree.key();
             // for each key-value pair
             tree.children().forEach((key, value) -> {
+                String newPrefix = prefix.isEmpty() ? key : prefix + "." + key;
                 generateConfigText(newPrefix, value, builder, depth + 1);
             });
         }

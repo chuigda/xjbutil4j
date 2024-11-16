@@ -61,8 +61,21 @@ public abstract sealed class Option<T> {
         }
     }
 
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    public static <T> Option<T> fromJavaOptional(java.util.Optional<T> optional) {
+    /// Converts Java 8 {@link java.util.Optional} to {@link Option}
+    ///
+    /// This function handles the cases where the Java 8 {@link java.util.Optional} itself is {@code null} and the value
+    /// inside the {@link java.util.Optional} is {@code null}, don't worry about it.
+    ///
+    /// @param optional Java 8 {@link java.util.Optional}
+    /// @param <T>      Type of the value
+    /// @return the converted {@link Option}
+    @SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "OptionalAssignedToNull"})
+    public static <T> Option<T> fromJavaOptional(@Nullable java.util.Optional<@Nullable T> optional) {
+        // I know that we have jdk.internal.ValueBased of course but let's still be safe here, and assume that Optional
+        // can be null in certain cases.
+        if (optional == null) {
+            return none();
+        }
         return optional.map(Option::fromNullable).orElseGet(Option::none);
     }
 
