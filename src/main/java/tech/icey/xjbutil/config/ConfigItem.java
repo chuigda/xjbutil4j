@@ -1,5 +1,7 @@
 package tech.icey.xjbutil.config;
 
 public @interface ConfigItem {
-    String value() default "";
+    String name() default "";
+    boolean hasDefault() default false;
+    String defaultValue() default "";
 }

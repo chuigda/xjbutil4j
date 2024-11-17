@@ -3,6 +3,7 @@ package tech.icey.xjbutil.container;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tech.icey.xjbutil.functional.Function0;
+import tech.icey.xjbutil.functional.Function1;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -188,6 +189,42 @@ public abstract sealed class Option<T> {
             return this;
         } else {
             return supplier.apply();
+        }
+    }
+
+    public final T orElseThrow() {
+        return get();
+    }
+
+    public final <U> Option<U> map(Function0<U> mapper) {
+        if (this instanceof Some) {
+            return some(mapper.apply());
+        } else {
+            return none();
+        }
+    }
+
+    public final <U> Option<U> map(Function1<T, U> mapper) {
+        if (this instanceof Option.Some<T> some) {
+            return some(mapper.apply(some.value));
+        } else {
+            return none();
+        }
+    }
+
+    public final <U> Option<U> flatMap(Function0<Option<U>> mapper) {
+        if (this instanceof Some) {
+            return mapper.apply();
+        } else {
+            return none();
+        }
+    }
+
+    public final <U> Option<U> flatMap(Function1<T, Option<U>> mapper) {
+        if (this instanceof Option.Some<T> some) {
+            return mapper.apply(some.value);
+        } else {
+            return none();
         }
     }
 }
