@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import tech.icey.xjbutil.functional.Function0;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /// A somewhat modernized option type intended to replace old, very limited {@link java.util.Optional}.
 ///
@@ -97,22 +98,49 @@ public abstract sealed class Option<T> {
         }
     }
 
-    /// Converts Java 8 {@link java.util.Optional} to {@link Option}
+    /// Converts Java 8 {@link Optional} to {@link Option}
     ///
-    /// This function handles the cases where the Java 8 {@link java.util.Optional} itself is {@code null} and the value
-    /// inside the {@link java.util.Optional} is {@code null}, don't worry about it.
+    /// This function handles the cases where the Java 8 {@link Optional} itself is {@code null} and the value inside
+    /// the {@link Optional} is {@code null}, don't worry about it.
     ///
-    /// @param optional Java 8 {@link java.util.Optional}
+    /// @param optional Java 8 {@link Optional}
     /// @param <T>      Type of the value
     /// @return the converted {@link Option}
     @SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "OptionalAssignedToNull"})
-    public static <T> Option<T> fromJavaOptional(@Nullable java.util.Optional<@Nullable T> optional) {
+    public static <T> Option<T> fromJavaOptional(@Nullable Optional<@Nullable T> optional) {
         // I know that we have jdk.internal.ValueBased of course but let's still be safe here, and assume that Optional
         // can be null in certain cases.
         if (optional == null) {
             return none();
         }
         return optional.map(Option::fromNullable).orElseGet(Option::none);
+    }
+
+    /// Sanitize a potentially malformed {@link Option} reference.
+    ///
+    /// This function should only be used for very, very bad cases where you fail to figure out why the {@link Option}
+    /// is malformed. This function will convert the {@link Option} to {@link Option#none()} if the {@link Option}
+    /// itself is {@code null} or the value inside the {@link Option} is {@code null}.
+    ///
+    /// Generally speaking, to avoid such cases, you should always use {@link #fromNullable} for objects you don't know
+    /// whether they can be {@code null} or not. You should always use {@link #fromJavaOptional} for Java 8
+    /// {@link Optional} objects.
+    ///
+    /// @see Option#fromNullable(Object)
+    /// @see Option#fromJavaOptional(Optional)
+    public static <T> Option<T> sanitize(@Nullable Option<T> option) {
+        if (option == null) {
+            return none();
+        } else {
+            // if the value inside option is unfortunately null, we will convert it to None
+            if (option instanceof Some<T> some) {
+                //noinspection ConstantValue
+                if (some.value == null) {
+                    return none();
+                }
+            }
+            return option;
+        }
     }
 
     public final T get() {
@@ -131,7 +159,23 @@ public abstract sealed class Option<T> {
         return this instanceof None;
     }
 
-    public final T or(Function0<T> supplier) {
+    public final T orElse(T defaultValue) {
+        if (this instanceof Some) {
+            return ((Some<T>)this).value;
+        } else {
+            return defaultValue;
+        }
+    }
+
+    public final Option<T> orElse(Option<T> defaultValue) {
+        if (this instanceof Some) {
+            return this;
+        } else {
+            return defaultValue;
+        }
+    }
+
+    public final T orElseGet(Function0<T> supplier) {
         if (this instanceof Some) {
             return ((Some<T>)this).value;
         } else {
@@ -139,11 +183,11 @@ public abstract sealed class Option<T> {
         }
     }
 
-    public final T orElse(T defaultValue) {
+    public final Option<T> orElseGetOption(Function0<Option<T>> supplier) {
         if (this instanceof Some) {
-            return ((Some<T>)this).value;
+            return this;
         } else {
-            return defaultValue;
+            return supplier.apply();
         }
     }
 }
