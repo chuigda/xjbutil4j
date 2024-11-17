@@ -152,6 +152,14 @@ public abstract sealed class Option<T> {
         }
     }
 
+    public final @Nullable T nullable() {
+        if (this instanceof Some) {
+            return ((Some<T>)this).value;
+        } else {
+            return null;
+        }
+    }
+
     public final boolean isSome() {
         return this instanceof Some;
     }
