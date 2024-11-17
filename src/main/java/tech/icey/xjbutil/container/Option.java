@@ -20,25 +20,25 @@ import java.util.NoSuchElementException;
 /// And the general preferred way of using it is to use poor man's `if let`:
 ///
 /// {@snippet lang=java :
-/// if (option instanceof Option.Some<String> someString) {
-///     doSomethingWithString(someString.value);
+/// if (sese instanceof Option.Some<String> someSese) {
+///     doSomethingWithString(someSese.value);
 /// }}
 ///
 /// Poor man's `let else`:
 ///
 /// {@snippet lang=java :
-/// if (!(option instanceof Option.Some<String> someString)) {
+/// if (!(sese instanceof Option.Some<String> someSese)) {
 ///     throw new RuntimeException("色不异空不是说让你真给我个空值啊");
 /// }
 ///
-/// doSomethingWithString(someString.value);}
+/// doSomethingWithString(someSese.value);}
 ///
 /// And new genesis Java switch:
 ///
 /// {@snippet lang=java :
-/// switch (option) {
-///     case Option.Some<String> someString -> doSomethingWithString(someString.value);
-///     case Option.None<?> none -> throw new RuntimeException("色不异空不是说让你真给我个空值啊");
+/// switch (sese) {
+///     case Option.Some<String> someSese -> doSomethingWithString(someSese.value);
+///     case Option.None<?> _ -> throw new RuntimeException("色不异空不是说让你真给我个空值啊");
 /// }}
 public abstract sealed class Option<T> {
     public static final class Some<T> extends Option<T> {
