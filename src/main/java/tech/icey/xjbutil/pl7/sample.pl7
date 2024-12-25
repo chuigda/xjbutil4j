@@ -1,3 +1,0 @@
-void entry() {
-    callJava("System.err.println", "Zdravstvuyte, mir");
-}
