@@ -12,6 +12,18 @@ public abstract sealed class Either<L, R> {
         public String toString() {
             return this.value.toString();
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof Left<?, ?> other)) return false;
+            return this.value.equals(other.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return value.hashCode();
+        }
     }
 
     public static final class Right<L, R> extends Either<L, R> {
@@ -24,6 +36,18 @@ public abstract sealed class Either<L, R> {
         @Override
         public String toString() {
             return this.value.toString();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof Right<?, ?> other)) return false;
+            return this.value.equals(other.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return value.hashCode();
         }
     }
 
