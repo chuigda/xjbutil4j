@@ -1,8 +1,8 @@
-package tech.icey.xjbutil.sync;
+package cc.design7.xjbutil.sync;
 
 import org.jetbrains.annotations.Nullable;
-import tech.icey.xjbutil.container.Pair;
-import tech.icey.xjbutil.container.Ref;
+import cc.design7.xjbutil.container.Pair;
+import cc.design7.xjbutil.container.Ref;
 
 import java.util.concurrent.Semaphore;
 

@@ -1,6 +1,6 @@
-package tech.icey.xjbutil.functional;
+package cc.design7.xjbutil.functional;
 
-import tech.icey.xjbutil.container.Pair;
+import cc.design7.xjbutil.container.Pair;
 
 import java.util.function.BiFunction;
 

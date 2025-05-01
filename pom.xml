@@ -30,7 +30,7 @@
         <url>https://github.com/chuigda/xjbutil4j</url>
     </scm>
 
-    <groupId>tech.icey</groupId>
+    <groupId>cc.design7</groupId>
     <artifactId>xjbutil</artifactId>
     <version>0.1.0</version>
 
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>24.0.0</version>
+            <version>26.0.2</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

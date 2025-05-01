@@ -1,4 +1,4 @@
-package tech.icey.xjbutil.functional;
+package cc.design7.xjbutil.functional;
 
 @FunctionalInterface
 public interface GeneralAction {

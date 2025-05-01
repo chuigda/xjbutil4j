@@ -1,4 +1,4 @@
-package tech.icey.xjbutil.container;
+package cc.design7.xjbutil.container;
 
 public final class Ref<T> {
     public T value;

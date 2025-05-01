@@ -1,4 +1,4 @@
-package tech.icey.xjbutil.container;
+package cc.design7.xjbutil.container;
 
 public abstract sealed class Either<L, R> {
     public static final class Left<L, R> extends Either<L, R> {

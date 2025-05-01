@@ -1,9 +1,9 @@
-package tech.icey.xjbutil.container;
+package cc.design7.xjbutil.container;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tech.icey.xjbutil.functional.Function0;
-import tech.icey.xjbutil.functional.Function1;
+import cc.design7.xjbutil.functional.Function0;
+import cc.design7.xjbutil.functional.Function1;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -46,6 +46,9 @@ public abstract sealed class Option<T> {
     public static final class Some<T> extends Option<T> {
         public final @NotNull T value;
 
+        /// Note that this constructor does not provide runtime null check, mostly out of
+        /// performance reasons. Here you need to rely on static analysis. If there's no such tool
+        /// available, you may use {@link Option#fromNullable(Object)} instead.
         public Some(@NotNull T value) {
             this.value = value;
         }
@@ -65,6 +68,11 @@ public abstract sealed class Option<T> {
             }
             Some<?> some = (Some<?>) obj;
             return value.equals(some.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return value.hashCode();
         }
     }
 

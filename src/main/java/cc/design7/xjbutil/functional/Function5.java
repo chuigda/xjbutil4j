@@ -1,6 +1,6 @@
-package tech.icey.xjbutil.functional;
+package cc.design7.xjbutil.functional;
 
-import tech.icey.xjbutil.container.Tuple5;
+import cc.design7.xjbutil.container.Tuple5;
 
 @FunctionalInterface
 public interface Function5<T1, T2, T3, T4, T5, R> {
